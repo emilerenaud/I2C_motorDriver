@@ -66,7 +66,7 @@ GenerateClassCluster=0
 DocumentUniqueId=ZSCSXMHZ
 
 [Document2]
-DocumentPath=PCB1.PcbDoc
+DocumentPath=I2C_motorDriver.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -76,11 +76,11 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=TSRRBJBB
+DocumentUniqueId=
 
 [Document3]
 DocumentPath=Output_job.OutJob
