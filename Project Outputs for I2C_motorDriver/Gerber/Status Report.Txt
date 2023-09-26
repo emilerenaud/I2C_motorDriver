@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [I2C_motorDriver.PcbDoc]
+   Generated File[I2C_motorDriver.TXT]
+   Generated File[I2C_motorDriver.LDP]
+   Generated File[I2C_motorDriver.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 12:30:14 On 2023-09-26
