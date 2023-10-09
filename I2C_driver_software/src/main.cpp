@@ -19,8 +19,9 @@
 
 
 // Prototypes
-void I2C_receive(int data);
+void I2C_receive(int test);
 void I2C_request(void);
+void I2C_setup(void);
 
 // Data
 MotorWrapper motor;
@@ -35,6 +36,8 @@ void setup() {
   motor.setSpd(0);
 
   // setup I2C slave
+  I2C_setup();
+
   Wire.begin(10);
   Wire.onReceive(I2C_receive);
   Wire.onRequest(I2C_request);
@@ -44,7 +47,7 @@ void loop() {
   motor.update();
 }
 
-void I2C_receive(int data)
+void I2C_receive(int test)
 {
   int reg = Wire.read();
   int data = Wire.read();
@@ -53,14 +56,19 @@ void I2C_receive(int data)
   switch(reg)
   {
     case drive_mode:
-      motor.setMode(MotorWrapper::eMotorMode::openLoop);
+      // motor.setMode(MotorWrapper::eMotorMode::openLoop);
+      motor.setMode(MotorWrapper::eMotorMode(data));
       break;
     case cmd_speed:
       motor.setSpd(data);
       break;
+    case cmd_pos:
+      motor.setPos(data);
+      break;
   }
 }
 
+// Not validated
 void I2C_request()
 {
   int reg = Wire.read();
@@ -73,8 +81,39 @@ void I2C_request()
     case drive_mode:
       Wire.write(1);
       break;
+    case status_drive:
+      Wire.write(2);
+      break;
     
   }
+}
+
+// Not working. PB5 read 1, PB4 read 0, PB3 read 0.
+void I2C_setup()
+{
+  pinMode(PB5,INPUT_PULLUP);
+  pinMode(PB4,INPUT_PULLUP);
+  pinMode(PB3,INPUT_PULLUP);
+  delay(100);
+  uint8_t addr = 0;
+  if(digitalRead(PB5) == 0)
+  {
+    Serial.print("PB5 = 0");
+    addr += 1;
+  }
+  if(digitalRead(PB4) == 0)
+  {
+    Serial.print("  PB4 = 0");
+    addr += 2;
+  }
+  if(digitalRead(PB3) == 0)
+  {
+    Serial.print("PB3 = 0");
+    addr += 4;
+  }
+
+  Serial.println("  Addr = " + String(addr));
+
 }
 
 
