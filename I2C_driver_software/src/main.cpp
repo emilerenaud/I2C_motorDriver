@@ -2,6 +2,9 @@
 #include "encoder_wrapper.h"
 #include "motor_wrapper.h"
 #include <Wire.h>
+#include "I2C_driver_register.h"
+
+#define DRIVER_VERSION 001
 
 #define motorPinA PD6
 #define motorPinB PD5
@@ -16,16 +19,11 @@
 
 
 // Prototypes
-void I2C_callback(int data);
+void I2C_receive(int data);
+void I2C_request(void);
 
 // Data
 MotorWrapper motor;
-
-struct I2Creg
-{
-  uint8_t cmd;
-  uint8_t data;
-};
 
 
 void setup() {
@@ -38,19 +36,45 @@ void setup() {
 
   // setup I2C slave
   Wire.begin(10);
-  Wire.onReceive(I2C_callback);
-
+  Wire.onReceive(I2C_receive);
+  Wire.onRequest(I2C_request);
 }
 
 void loop() {
   motor.update();
 }
 
-void I2C_callback(int data)
+void I2C_receive(int data)
 {
-  byte cmd = Wire.read();
-  motor.setSpd(cmd);
-  Serial.println(cmd);
+  int reg = Wire.read();
+  int data = Wire.read();
+  Serial.println("Reg = " + String(reg) + " Data = " + String(data));
+
+  switch(reg)
+  {
+    case drive_mode:
+      motor.setMode(MotorWrapper::eMotorMode::openLoop);
+      break;
+    case cmd_speed:
+      motor.setSpd(data);
+      break;
+  }
+}
+
+void I2C_request()
+{
+  int reg = Wire.read();
+
+  switch(reg)
+  {
+    case drive_version:
+      Wire.write(DRIVER_VERSION);
+      break;
+    case drive_mode:
+      Wire.write(1);
+      break;
+    
+  }
 }
 
 
