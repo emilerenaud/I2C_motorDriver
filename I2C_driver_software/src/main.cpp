@@ -6,16 +6,20 @@
 
 #define DRIVER_VERSION 001
 
-#define motorPinA PD6
-#define motorPinB PD5
-#define encoderPinA PD4
-#define encoderPinB PD3
+#define motorPinA 6 // PD6
+#define motorPinB 5 // PD5
+#define encoderPinA 4 // PD4
+#define encoderPinB 3 // PD3
 
-#define led1 PB0
-#define led2 PB1
+#define led1 8 // PB0
+#define led2 9 // PB1
 
-#define SDA PC4
-#define SCL PC5
+#define SDA A4 // PC4
+#define SCL A5 // PC5
+
+#define addrPin1 13 // PB5
+#define addrPin2 12 // PB4
+#define addrPin3 11 // PB3
 
 
 // Prototypes
@@ -31,6 +35,10 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Start");
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  digitalWrite(led1, 0);
+  digitalWrite(led2, 0);
 
   motor.init(motorPinA, motorPinB, encoderPinA, encoderPinB);
   motor.setSpd(0);
@@ -91,22 +99,22 @@ void I2C_request()
 // Not working. PB5 read 1, PB4 read 0, PB3 read 0.
 void I2C_setup()
 {
-  pinMode(PB5,INPUT_PULLUP);
-  pinMode(PB4,INPUT_PULLUP);
-  pinMode(PB3,INPUT_PULLUP);
+  pinMode(addrPin1,INPUT_PULLUP);
+  pinMode(addrPin2,INPUT_PULLUP);
+  pinMode(addrPin3,INPUT_PULLUP);
   delay(100);
   uint8_t addr = 0;
-  if(digitalRead(PB5) == 0)
+  if(digitalRead(addrPin1) == 0)
   {
     Serial.print("PB5 = 0");
     addr += 1;
   }
-  if(digitalRead(PB4) == 0)
+  if(digitalRead(addrPin2) == 0)
   {
     Serial.print("  PB4 = 0");
     addr += 2;
   }
-  if(digitalRead(PB3) == 0)
+  if(digitalRead(addrPin3) == 0)
   {
     Serial.print("PB3 = 0");
     addr += 4;
