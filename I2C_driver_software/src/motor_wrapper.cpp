@@ -72,13 +72,13 @@ void MotorWrapper::setPos(double pos)
     _goalPos = pos;
 }
 
-void MotorWrapper::setSpd(double spd)
+void MotorWrapper::setSpd(int8_t spd)
 {
     _goalSpd = spd;
 }
 
 // cmd to motor DC[-100 to 100]. BLDC[0 to 100]
-void MotorWrapper::sendCmd(uint8_t cmd)
+void MotorWrapper::sendCmd(int8_t cmd)
 {
     if (cmd < -100 || cmd > 100)
     {
@@ -98,6 +98,11 @@ void MotorWrapper::setPID(double kp, double ki, double kd, double limite)
 {
     this->_pid.setGains(kp,ki,kd);
     this->_pid.seteIntLimit(limite);
+}
+
+long MotorWrapper::getPos()
+{
+    return _pos;
 }
 
 double MotorWrapper::mmToStep(double mm)

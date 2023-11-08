@@ -19,7 +19,7 @@ private:
     double _spd = 0;
     double _lastPos = 0;
     double _goalPos = 0;
-    double _goalSpd = 0;
+    uint8_t _goalSpd = 0;
     double _lastCmd = 0;
 
     unsigned long _lastMillis = 0;
@@ -40,14 +40,16 @@ public:
     ~MotorWrapper();
     void init(uint8_t pinA, uint8_t pinB, uint8_t encoderPinA, uint8_t encoderPinB);
 
-    void sendCmd(uint8_t cmd);
+    void sendCmd(int8_t cmd);
     void setPos(double pos);
-    void setSpd(double spd);
+    void setSpd(int8_t spd);
 
     void update(void);
 
     void setMode(eMotorMode mode);
     void setPID(double kp, double ki, double kd, double limite);
+
+    long getPos();
 
     double mmToStep(double mm);
 
